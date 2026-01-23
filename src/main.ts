@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,9 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
+  // API prefix
+  app.setGlobalPrefix('api/v1');
+
   // Global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
@@ -28,12 +32,21 @@ async function bootstrap() {
     }),
   );
 
-  // API prefix
-  app.setGlobalPrefix('api');
+  //swagger api
+  const config = new DocumentBuilder()
+    .setTitle('Ebook Store API')
+    .setDescription('API documentation for the Ebook Store application')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
 
-  const port = configService.get<number>('PORT') || 3000;
+  const port = configService.getOrThrow<number>('PORT') || 3000;
   await app.listen(port);
 
-  console.log(`🚀 Application is running on: http://localhost:${port}/api`);
+  console.log(
+    `🚀 Application is running on: http://localhost:${port}/api/docs`,
+  );
 }
 bootstrap();
