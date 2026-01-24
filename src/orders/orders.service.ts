@@ -1,7 +1,6 @@
 import {
   Injectable,
   NotFoundException,
-  BadRequestException,
   ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -137,7 +136,7 @@ export class OrdersService {
         user: order.user
           ? {
               id: order.user.id,
-              name: order.user.name,
+              fullname: order.user.fullname,
               email: order.user.email,
             }
           : null,
@@ -169,7 +168,7 @@ export class OrdersService {
     return {
       ...order,
       user: order.user
-        ? { id: order.user.id, name: order.user.name, email: order.user.email }
+        ? { id: order.user.id, fullname: order.user.fullname, email: order.user.email }
         : null,
     };
   }
@@ -220,7 +219,7 @@ export class OrdersService {
         user: order.user
           ? {
               id: order.user.id,
-              name: order.user.name,
+              fullname: order.user.fullname,
               email: order.user.email,
             }
           : null,

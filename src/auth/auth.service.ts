@@ -33,7 +33,7 @@ export class AuthService {
 
     // Create user
     const user = this.usersRepository.create({
-      name: registerDto.name,
+      fullname: registerDto.fullname,
       email: registerDto.email,
       password: hashedPassword,
       role: registerDto.role,

@@ -104,7 +104,7 @@ export class BooksService {
       data: books.map((book) => ({
         ...book,
         seller: book.seller
-          ? { id: book.seller.id, name: book.seller.name }
+          ? { id: book.seller.id, fullname: book.seller.fullname }
           : null,
       })),
       meta: {
@@ -132,7 +132,7 @@ export class BooksService {
     return {
       ...book,
       seller: book.seller
-        ? { id: book.seller.id, name: book.seller.name }
+        ? { id: book.seller.id, fullname: book.seller.fullname }
         : null,
     };
   }

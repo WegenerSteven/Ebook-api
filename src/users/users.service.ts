@@ -21,7 +21,7 @@ export class UsersService {
     const [users, total] = await this.usersRepository.findAndCount({
       select: [
         'id',
-        'name',
+        'fullname',
         'email',
         'role',
         'avatarUrl',
@@ -49,7 +49,7 @@ export class UsersService {
       where: { id },
       select: [
         'id',
-        'name',
+        'fullname',
         'email',
         'role',
         'avatarUrl',
@@ -158,7 +158,7 @@ export class UsersService {
   async getSellers(page = 1, limit = 10) {
     const [sellers, total] = await this.usersRepository.findAndCount({
       where: { role: UserRole.SELLER, isActive: true },
-      select: ['id', 'name', 'email', 'avatarUrl', 'createdAt'],
+      select: ['id', 'fullname', 'email', 'avatarUrl', 'createdAt'],
       skip: (page - 1) * limit,
       take: limit,
       order: { createdAt: 'DESC' },

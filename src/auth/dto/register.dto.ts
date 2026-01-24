@@ -12,7 +12,7 @@ export class RegisterDto {
   @IsString()
   @MinLength(2)
   @ApiProperty({ example: 'John Doe', description: 'Full name of the user' })
-  name: string;
+  fullname: string;
 
   @IsEmail()
   @ApiProperty({
