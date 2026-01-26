@@ -168,7 +168,11 @@ export class OrdersService {
     return {
       ...order,
       user: order.user
-        ? { id: order.user.id, fullname: order.user.fullname, email: order.user.email }
+        ? {
+            id: order.user.id,
+            fullname: order.user.fullname,
+            email: order.user.email,
+          }
         : null,
     };
   }
