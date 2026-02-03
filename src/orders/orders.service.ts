@@ -42,7 +42,7 @@ export class OrdersService {
       let subtotal = 0;
 
       for (const item of items) {
-        const book = await this.booksRepository.findOne({
+        const book = await queryRunner.manager.findOne(Book, {
           where: { id: item.bookId, isActive: true },
         });
 
@@ -84,7 +84,7 @@ export class OrdersService {
       for (const item of orderItems) {
         const orderItem = queryRunner.manager.create(OrderItem, {
           ...item,
-          orderId: savedOrder.id,
+          orderId: savedOrder.orderId,
         });
         await queryRunner.manager.save(orderItem);
 
@@ -102,7 +102,7 @@ export class OrdersService {
 
       await queryRunner.commitTransaction();
 
-      return this.findOne(savedOrder.id, userId, UserRole.USER);
+      return this.findOne(savedOrder.orderId, userId, UserRole.USER);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
@@ -152,7 +152,7 @@ export class OrdersService {
 
   async findOne(id: number, userId: string, userRole: UserRole) {
     const order = await this.ordersRepository.findOne({
-      where: { id },
+      where: { orderId: id },
       relations: ['items', 'items.book', 'user'],
     });
 
@@ -184,7 +184,7 @@ export class OrdersService {
     userRole: UserRole,
   ) {
     const order = await this.ordersRepository.findOne({
-      where: { id },
+      where: { orderId: id },
     });
 
     if (!order) {
