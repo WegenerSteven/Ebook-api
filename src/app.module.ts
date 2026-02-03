@@ -11,6 +11,7 @@ import { SellerModule } from './seller/seller.module';
 import { AdminModule } from './admin/admin.module';
 import { DatabaseModule } from './config/database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ConfigModule } from '@nestjs/config';
     SellerModule,
     AdminModule,
     DatabaseModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
