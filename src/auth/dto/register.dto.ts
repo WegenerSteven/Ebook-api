@@ -2,10 +2,10 @@ import {
   IsEmail,
   IsString,
   MinLength,
-  IsOptional,
-  IsEnum,
+  // IsOptional,
+  // IsEnum,
 } from 'class-validator';
-import { UserRole } from '../../entities';
+// import { UserRole } from '../../entities';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
@@ -29,12 +29,12 @@ export class RegisterDto {
   })
   password: string;
 
-  @IsOptional()
-  @IsEnum(UserRole)
-  @ApiProperty({
-    example: UserRole.USER,
-    description: 'Role of the user',
-    required: false,
-  })
-  role?: UserRole;
+  // @IsOptional()
+  // @IsEnum(UserRole)
+  // @ApiProperty({
+  //   example: UserRole.USER,
+  //   description: 'Role of the user',
+  //   required: false,
+  // })
+  // role?: UserRole;
 }

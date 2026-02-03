@@ -22,7 +22,7 @@ export enum OrderStatus {
 @Entity('orders')
 export class Order {
   @PrimaryGeneratedColumn()
-  id: number;
+  orderId: number;
 
   @Column({ unique: true })
   orderNumber: string;
