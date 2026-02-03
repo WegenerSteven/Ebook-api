@@ -32,7 +32,7 @@ export class SellerController {
   @Get('dashboard')
   @ApiOperation({ summary: 'Get seller dashboard data' })
   async getDashboard(@CurrentUser('id') sellerId: string) {
-    const stats = await this.booksService.getSellerStats(sellerId);
+    const bookStats = await this.booksService.getSellerStats(sellerId);
     const orderStats = await this.ordersService.getOrderStats(
       UserRole.SELLER,
       sellerId,
@@ -46,7 +46,7 @@ export class SellerController {
     );
 
     const recentSales = recentOrdersData.data.map((order) => ({
-      id: order.id,
+      id: order.orderId,
       product: order.items[0]?.book?.title || 'Unknown Product',
       buyer: order.user?.fullname || 'Unknown Buyer',
       amount: order.total.toString(),
@@ -54,7 +54,11 @@ export class SellerController {
     }));
 
     return {
-      ...stats,
+      stats: bookStats.stats,
+      totalBooks: bookStats.totalBooks,
+      totalSales: bookStats.totalSalesCount,
+      totalViews: bookStats.totalViews,
+      conversionRate: bookStats.conversionRate,
       ...orderStats,
       recentSales,
     };
@@ -130,20 +134,14 @@ export class SellerController {
   @Get('stats')
   @ApiOperation({ summary: 'Get seller statistics' })
   async getSellerStats(@CurrentUser('id') sellerId: string) {
-    const bookStats = await this.booksService.getSellerStats(sellerId);
-    const orderStats = await this.ordersService.getOrderStats(
-      UserRole.SELLER,
-      sellerId,
-    );
+    const stats = await this.booksService.getSellerStats(sellerId);
 
     return {
-      ...bookStats,
-      ...orderStats,
-      totalBooks: bookStats.totalProducts,
-      conversionRate:
-        bookStats.totalViews > 0
-          ? ((bookStats.totalSales / bookStats.totalViews) * 100).toFixed(1)
-          : 0,
+      stats: stats.stats,
+      totalBooks: stats.totalBooks,
+      totalSalesCount: stats.totalSalesCount,
+      totalViews: stats.totalViews,
+      conversionRate: stats.conversionRate,
     };
   }
 }
