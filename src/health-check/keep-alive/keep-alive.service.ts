@@ -19,14 +19,14 @@ export class keepAliveService implements OnModuleInit {
     private readonly configService: ConfigService,
   ) {
     this.baseUrl =
-      this.configService.getOrThrow<string>('BACKEND_URL') ||
-      this.configService.getOrThrow<string>('APP_URL') ||
+      this.configService.get<string>('BACKEND_URL') ||
+      this.configService.get<string>('APP_URL') ||
       'http://localhost:3000';
   }
 
   onModuleInit() {
     //start self-ping when the module initializes
-    if (this.configService.getOrThrow<string>('NODE_ENV') === 'production') {
+    if (this.configService.get<string>('NODE_ENV') === 'production') {
       this.logger.log('Starting KeepAlive service for production');
       this.startSelfPing();
     }
@@ -35,11 +35,11 @@ export class keepAliveService implements OnModuleInit {
   //self-ping to keep render instance alive
   private startSelfPing() {
     //ping every 5 mins (Render spins down after 15 mins of inactivity)
-    const PINF_INTERVAL = 5 * 60 * 1000;
+    const PING_INTERVAL = 15 * 60 * 1000;
 
     setInterval(() => {
       void this.pingOwnerServer();
-    }, PINF_INTERVAL);
+    }, PING_INTERVAL);
 
     //initial ping
     setTimeout(() => void this.pingOwnerServer(), 5000);
@@ -47,19 +47,19 @@ export class keepAliveService implements OnModuleInit {
 
   private async pingOwnerServer() {
     try {
-      const healthUrl = `${this.baseUrl}/health-check`;
+      const healthUrl = `${this.baseUrl}/api/health-check`;
       const response: AxiosResponse<string> = await firstValueFrom(
         this.httpService.get<string>(healthUrl),
       );
       this.logger.debug('Self-ping successful - Render instance kept alive');
       return response;
-    } catch {
-      this.logger.warn('Self-ping failed (might be starting up)');
+    } catch (error) {
+      this.logger.warn('Self-ping failed (might be starting up)', error);
     }
   }
 
   @Cron(CronExpression.EVERY_10_MINUTES)
-  async KeepDatabaseAlive() {
+  async keepDatabaseAlive() {
     try {
       await this.userRepo.count();
       this.logger.log('Db connection is live');
