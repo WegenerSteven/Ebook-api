@@ -27,7 +27,7 @@ export class HealthCheckController {
     };
   }
 
-  @Get()
+  @Get('ping')
   @Public()
   @ApiOperation({ summary: 'Simple ping endpoint' })
   ping() {
