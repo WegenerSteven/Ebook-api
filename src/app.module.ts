@@ -12,6 +12,7 @@ import { AdminModule } from './admin/admin.module';
 import { DatabaseModule } from './config/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { PaymentsModule } from './payments/payments.module';
+import { HealthCheckModule } from './health-check/health-check.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PaymentsModule } from './payments/payments.module';
     AdminModule,
     DatabaseModule,
     PaymentsModule,
+    HealthCheckModule,
   ],
   controllers: [AppController],
   providers: [AppService],
