@@ -135,7 +135,7 @@ export class OrdersService {
         ...order,
         user: order.user
           ? {
-              id: order.user.id,
+              id: order.user.userId,
               fullname: order.user.fullname,
               email: order.user.email,
             }
@@ -169,7 +169,7 @@ export class OrdersService {
       ...order,
       user: order.user
         ? {
-            id: order.user.id,
+            id: order.user.userId,
             fullname: order.user.fullname,
             email: order.user.email,
           }
@@ -222,7 +222,7 @@ export class OrdersService {
         ...order,
         user: order.user
           ? {
-              id: order.user.id,
+              id: order.user.userId,
               fullname: order.user.fullname,
               email: order.user.email,
             }
