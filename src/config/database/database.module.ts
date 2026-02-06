@@ -1,7 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Book, User, Category, Order, CartItem, Review } from '../../entities';
+import {
+  Book,
+  User,
+  Category,
+  Order,
+  CartItem,
+  Review,
+  Payment,
+} from '../../entities';
 
 @Module({
   imports: [
@@ -18,7 +26,7 @@ import { Book, User, Category, Order, CartItem, Review } from '../../entities';
           username: configService.getOrThrow<string>('DB_USERNAME'),
           password: configService.getOrThrow<string>('DB_PASSWORD'),
           database: configService.getOrThrow<string>('DB_NAME'),
-          entities: [User, Book, Category, Order, CartItem, Review],
+          entities: [User, Book, Category, Order, CartItem, Review, Payment],
           synchronize: shouldSync,
           logging: configService.getOrThrow<boolean>('DB_LOGGING'),
           migrations: [__dirname + '/migrations/**/*{.ts, .js}'],
