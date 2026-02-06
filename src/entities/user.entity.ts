@@ -10,6 +10,7 @@ import { Book } from './book.entity';
 import { Order } from './order.entity';
 import { CartItem } from './cart-item.entity';
 import { Review } from './review.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
 
 export enum UserRole {
   USER = 'user',
@@ -20,7 +21,7 @@ export enum UserRole {
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  userId: string;
 
   @Column()
   fullname: string;
@@ -58,6 +59,12 @@ export class User {
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.user)
   cartItems: CartItem[];
+
+  @Column({ nullable: true })
+  stripeCustomerId?: string;
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
 
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];

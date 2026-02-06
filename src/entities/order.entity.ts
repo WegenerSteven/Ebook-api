@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { OrderItem } from './order-item.entity';
+import { PaymentMethod } from '../payments/entities/payment.entity';
 
 export enum OrderStatus {
   PENDING = 'pending',
@@ -17,6 +18,7 @@ export enum OrderStatus {
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
   REFUNDED = 'refunded',
+  FAILED = 'failed',
 }
 
 @Entity('orders')
@@ -52,6 +54,14 @@ export class Order {
 
   @Column({ nullable: true })
   paymentIntentId: string;
+
+  @Column({
+    type: 'enum',
+    enum: PaymentMethod,
+    default: PaymentMethod.STRIPE,
+    nullable: true,
+  })
+  paymentMethod?: PaymentMethod;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
   items: OrderItem[];
