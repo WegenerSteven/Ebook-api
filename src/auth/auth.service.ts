@@ -90,7 +90,7 @@ export class AuthService {
 
   async getProfile(userId: string) {
     const user = await this.usersRepository.findOne({
-      where: { id: userId },
+      where: { userId },
     });
 
     if (!user) {
@@ -101,7 +101,7 @@ export class AuthService {
   }
 
   private async generateTokens(user: User) {
-    const payload = { sub: user.id, email: user.email, role: user.role };
+    const payload = { sub: user.userId, email: user.email, role: user.role };
 
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
@@ -134,7 +134,7 @@ export class AuthService {
         secret: process.env.JWT_REFRESH_SECRET,
       });
       const user = await this.usersRepository.findOne({
-        where: { id: payload.sub },
+        where: { userId: payload.sub },
       });
 
       if (!user || !user.isActive) {
@@ -222,7 +222,7 @@ export class AuthService {
     const { currentPassword, newPassword } = changePasswordDto;
 
     const user = await this.usersRepository.findOne({
-      where: { id: userId },
+      where: { userId },
     });
 
     if (!user) {
