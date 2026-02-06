@@ -20,7 +20,7 @@ export class UsersService {
   async findAll(page = 1, limit = 10) {
     const [users, total] = await this.usersRepository.findAndCount({
       select: [
-        'id',
+        'userId',
         'fullname',
         'email',
         'role',
@@ -44,11 +44,11 @@ export class UsersService {
     };
   }
 
-  async findOne(id: string) {
+  async findOne(userId: string) {
     const user = await this.usersRepository.findOne({
-      where: { id },
+      where: { userId },
       select: [
-        'id',
+        'userId',
         'fullname',
         'email',
         'role',
@@ -72,15 +72,17 @@ export class UsersService {
   }
 
   async update(
-    id: string,
+    userId: string,
     updateUserDto: UpdateUserDto,
     currentUserId: string,
   ) {
-    if (id !== currentUserId) {
+    if (userId !== currentUserId) {
       throw new ForbiddenException('You can only update your own profile');
     }
 
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({
+      where: { userId },
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -97,12 +99,12 @@ export class UsersService {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
 
-    await this.usersRepository.update(id, updateUserDto);
-    return this.findOne(id);
+    await this.usersRepository.update(userId, updateUserDto);
+    return this.findOne(userId);
   }
 
-  async adminUpdate(id: string, updateUserDto: AdminUpdateUserDto) {
-    const user = await this.usersRepository.findOne({ where: { id } });
+  async adminUpdate(userId: string, updateUserDto: AdminUpdateUserDto) {
+    const user = await this.usersRepository.findOne({ where: { userId } });
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -119,19 +121,19 @@ export class UsersService {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
 
-    await this.usersRepository.update(id, updateUserDto);
-    return this.findOne(id);
+    await this.usersRepository.update(userId, updateUserDto);
+    return this.findOne(userId);
   }
 
-  async remove(id: string) {
-    const user = await this.usersRepository.findOne({ where: { id } });
+  async remove(userId: string) {
+    const user = await this.usersRepository.findOne({ where: { userId } });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     // Soft delete by deactivating
-    await this.usersRepository.update(id, { isActive: false });
+    await this.usersRepository.update(userId, { isActive: false });
     return { message: 'User deactivated successfully' };
   }
 
@@ -158,7 +160,7 @@ export class UsersService {
   async getSellers(page = 1, limit = 10) {
     const [sellers, total] = await this.usersRepository.findAndCount({
       where: { role: UserRole.SELLER, isActive: true },
-      select: ['id', 'fullname', 'email', 'avatarUrl', 'createdAt'],
+      select: ['userId', 'fullname', 'email', 'avatarUrl', 'createdAt'],
       skip: (page - 1) * limit,
       take: limit,
       order: { createdAt: 'DESC' },
