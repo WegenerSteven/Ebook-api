@@ -31,7 +31,7 @@ export class SellerController {
 
   @Get('dashboard')
   @ApiOperation({ summary: 'Get seller dashboard data' })
-  async getDashboard(@CurrentUser('id') sellerId: string) {
+  async getDashboard(@CurrentUser('userId') sellerId: string) {
     const bookStats = await this.booksService.getSellerStats(sellerId);
     const orderStats = await this.ordersService.getOrderStats(
       UserRole.SELLER,
@@ -67,7 +67,7 @@ export class SellerController {
   @Get('books')
   @ApiOperation({ summary: 'Get all books for the seller' })
   async getSellerBooks(
-    @CurrentUser('id') sellerId: string,
+    @CurrentUser('userId') sellerId: string,
     @Query() queryDto: QueryBooksDto,
   ) {
     return this.booksService.getSellerBooks(sellerId, queryDto);
@@ -77,7 +77,7 @@ export class SellerController {
   @ApiOperation({ summary: 'Get a specific book by ID' })
   async getBook(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser('id') sellerId: string,
+    @CurrentUser('userId') sellerId: string,
     @CurrentUser('role') role: UserRole,
   ) {
     const book = await this.booksService.findOne(id);
@@ -95,7 +95,7 @@ export class SellerController {
   @ApiOperation({ summary: 'Create a new book' })
   async createBook(
     @Body() createBookDto: CreateBookDto,
-    @CurrentUser('id') sellerId: string,
+    @CurrentUser('userId') sellerId: string,
   ) {
     return this.booksService.create(createBookDto, sellerId);
   }
@@ -105,7 +105,7 @@ export class SellerController {
   async updateBook(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateBookDto: UpdateBookDto,
-    @CurrentUser('id') sellerId: string,
+    @CurrentUser('userId') sellerId: string,
     @CurrentUser('role') role: UserRole,
   ) {
     return this.booksService.update(id, updateBookDto, sellerId, role);
@@ -115,7 +115,7 @@ export class SellerController {
   @ApiOperation({ summary: 'Delete a book (soft delete)' })
   async deleteBook(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser('id') sellerId: string,
+    @CurrentUser('userId') sellerId: string,
     @CurrentUser('role') role: UserRole,
   ) {
     return this.booksService.remove(id, sellerId, role);
@@ -124,7 +124,7 @@ export class SellerController {
   @Get('orders')
   @ApiOperation({ summary: 'Get orders containing seller products' })
   async getSellerOrders(
-    @CurrentUser('id') sellerId: string,
+    @CurrentUser('userId') sellerId: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
   ) {
@@ -133,7 +133,7 @@ export class SellerController {
 
   @Get('stats')
   @ApiOperation({ summary: 'Get seller statistics' })
-  async getSellerStats(@CurrentUser('id') sellerId: string) {
+  async getSellerStats(@CurrentUser('userId') sellerId: string) {
     const stats = await this.booksService.getSellerStats(sellerId);
 
     return {

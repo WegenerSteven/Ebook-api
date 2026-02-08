@@ -50,7 +50,7 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-    @CurrentUser('id') currentUserId: string,
+    @CurrentUser('userId') currentUserId: string,
   ) {
     return this.usersService.update(id, updateUserDto, currentUserId);
   }
