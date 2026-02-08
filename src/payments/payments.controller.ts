@@ -43,10 +43,10 @@ export class PaymentsController {
   })
   @ApiResponse({ status: 404, description: 'Order or user not found' })
   async createPaymentIntent(
-    @CurrentUser() user: User,
+    @CurrentUser('userId') userId: string,
     @Body() dto: CreatePaymentDto,
   ) {
-    return this.paymentsService.createPaymentIntent(user.userId, dto);
+    return this.paymentsService.createPaymentIntent(userId, dto);
   }
 
   @Post('confirm')
@@ -86,7 +86,7 @@ export class PaymentsController {
   @ApiResponse({ status: 200, description: 'Payment details for the order' })
   @ApiResponse({ status: 404, description: 'Payment not found for this order' })
   async getPaymentByOrder(
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @Param('orderId') orderId: number,
   ) {
     return this.paymentsService.getPaymentByOrderId(orderId, userId);

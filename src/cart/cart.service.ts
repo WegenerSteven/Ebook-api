@@ -63,7 +63,10 @@ export class CartService {
 
     // Check if item already in cart
     let cartItem = await this.cartItemsRepository.findOne({
-      where: { userId, bookId },
+      where: {
+        userId: userId,
+        bookId: addToCartDto.bookId,
+      },
     });
 
     if (cartItem) {
@@ -73,8 +76,8 @@ export class CartService {
     } else {
       // Create new cart item
       cartItem = this.cartItemsRepository.create({
-        userId,
-        bookId,
+        userId: userId,
+        bookId: addToCartDto.bookId,
         quantity,
       });
       await this.cartItemsRepository.save(cartItem);

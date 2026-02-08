@@ -25,7 +25,7 @@ export class BooksController {
   @Roles(UserRole.SELLER, UserRole.ADMIN)
   create(
     @Body() createBookDto: CreateBookDto,
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
   ) {
     return this.booksService.create(createBookDto, userId);
   }
@@ -61,7 +61,7 @@ export class BooksController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateBookDto: UpdateBookDto,
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @CurrentUser('role') userRole: UserRole,
   ) {
     return this.booksService.update(id, updateBookDto, userId, userRole);
@@ -72,7 +72,7 @@ export class BooksController {
   @Roles(UserRole.SELLER, UserRole.ADMIN)
   remove(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @CurrentUser('role') userRole: UserRole,
   ) {
     return this.booksService.remove(id, userId, userRole);

@@ -20,18 +20,18 @@ export class CartController {
   constructor(private readonly cartService: CartService) {}
 
   @Get()
-  getCart(@CurrentUser('id') userId: string) {
+  getCart(@CurrentUser('userId') userId: string) {
     return this.cartService.getCart(userId);
   }
 
   @Get('count')
-  getCartCount(@CurrentUser('id') userId: string) {
+  getCartCount(@CurrentUser('userId') userId: string) {
     return this.cartService.getCartCount(userId);
   }
 
   @Post()
   addToCart(
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @Body() addToCartDto: AddToCartDto,
   ) {
     return this.cartService.addToCart(userId, addToCartDto);
@@ -39,7 +39,7 @@ export class CartController {
 
   @Patch(':id')
   updateCartItem(
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @Param('id', ParseIntPipe) itemId: number,
     @Body() updateDto: UpdateCartItemDto,
   ) {
@@ -48,14 +48,14 @@ export class CartController {
 
   @Delete(':id')
   removeFromCart(
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @Param('id', ParseIntPipe) itemId: number,
   ) {
     return this.cartService.removeFromCart(userId, itemId);
   }
 
   @Delete()
-  clearCart(@CurrentUser('id') userId: string) {
+  clearCart(@CurrentUser('userId') userId: string) {
     return this.cartService.clearCart(userId);
   }
 }

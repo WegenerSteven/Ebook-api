@@ -23,7 +23,7 @@ export class OrdersController {
   @Post()
   create(
     @Body() createOrderDto: CreateOrderDto,
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
   ) {
     return this.ordersService.create(createOrderDto, userId);
   }
@@ -32,7 +32,7 @@ export class OrdersController {
   findAll(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
-    @CurrentUser('id') userId?: string,
+    @CurrentUser('userId') userId?: string,
     @CurrentUser('role') userRole?: UserRole,
   ) {
     return this.ordersService.findAll(page, limit, userId, userRole);
@@ -40,7 +40,7 @@ export class OrdersController {
 
   @Get('my-orders')
   getUserOrders(
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
   ) {
@@ -51,7 +51,7 @@ export class OrdersController {
   @UseGuards(RolesGuard)
   @Roles(UserRole.SELLER, UserRole.ADMIN)
   getSellerOrders(
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
   ) {
@@ -63,7 +63,7 @@ export class OrdersController {
   @Roles(UserRole.SELLER, UserRole.ADMIN)
   getOrderStats(
     @CurrentUser('role') userRole: UserRole,
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
   ) {
     return this.ordersService.getOrderStats(userRole, userId);
   }
@@ -78,7 +78,7 @@ export class OrdersController {
   @Get(':id')
   findOne(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @CurrentUser('role') userRole: UserRole,
   ) {
     return this.ordersService.findOne(id, userId, userRole);
@@ -90,7 +90,7 @@ export class OrdersController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateOrderDto: UpdateOrderDto,
-    @CurrentUser('id') userId: string,
+    @CurrentUser('userId') userId: string,
     @CurrentUser('role') userRole: UserRole,
   ) {
     return this.ordersService.update(id, updateOrderDto, userId, userRole);
