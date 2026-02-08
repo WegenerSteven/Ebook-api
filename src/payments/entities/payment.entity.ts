@@ -32,7 +32,7 @@ export class Payment {
   @Column({ unique: true })
   paymentIntentId: string; //string PaymentIntent ID
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   amount: number;
 
   @Column()
