@@ -8,11 +8,13 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { AddToCartDto, UpdateCartItemDto } from './dto';
 import { JwtAuthGuard } from '../auth/guards';
 import { CurrentUser } from '../auth/decorators';
+import { User } from 'src/entities';
 
 @Controller('cart')
 @UseGuards(JwtAuthGuard)
@@ -30,10 +32,13 @@ export class CartController {
   }
 
   @Post()
-  addToCart(
-    @CurrentUser('userId') userId: string,
-    @Body() addToCartDto: AddToCartDto,
-  ) {
+  addToCart(@CurrentUser() user: User, @Body() addToCartDto: AddToCartDto) {
+    //extract useid from the correct propoerty
+    const userId = user?.userId;
+
+    if (!userId) {
+      throw new UnauthorizedException('User id not found in token');
+    }
     return this.cartService.addToCart(userId, addToCartDto);
   }
 

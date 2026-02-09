@@ -121,8 +121,8 @@ export class PaymentsService {
         status: PaymentStatus.PENDING,
         method: PaymentMethod.STRIPE,
         stripeCustomerId,
-        user: { userId },
-        order: { orderId: order.orderId },
+        userId: userId,
+        orderId: order.orderId,
         metadata: {
           clientSecret: paymentIntent.client_secret,
           stripe_payment_intent_id: paymentIntent.id,

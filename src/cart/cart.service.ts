@@ -51,7 +51,6 @@ export class CartService {
 
   async addToCart(userId: string, addToCartDto: AddToCartDto) {
     const { bookId, quantity } = addToCartDto;
-
     // Check if book exists
     const book = await this.booksRepository.findOne({
       where: { id: bookId, isActive: true },
@@ -62,7 +61,7 @@ export class CartService {
     }
 
     // Check if item already in cart
-    let cartItem = await this.cartItemsRepository.findOne({
+    const cartItem = await this.cartItemsRepository.findOne({
       where: {
         userId: userId,
         bookId: addToCartDto.bookId,
@@ -71,15 +70,16 @@ export class CartService {
 
     if (cartItem) {
       // Update quantity
-      cartItem.quantity += quantity;
-      await this.cartItemsRepository.save(cartItem);
+      cartItem.quantity += addToCartDto.quantity;
+      return await this.cartItemsRepository.save(cartItem);
     } else {
       // Create new cart item
-      cartItem = this.cartItemsRepository.create({
+      const cartItem = this.cartItemsRepository.create({
         userId: userId,
         bookId: addToCartDto.bookId,
         quantity,
       });
+
       await this.cartItemsRepository.save(cartItem);
     }
 
