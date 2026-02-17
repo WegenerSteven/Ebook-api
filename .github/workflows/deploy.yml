@@ -1,0 +1,25 @@
+name: Deploy to Render
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+          - name: Trigger Render Deploy
+            if: github.event_name == 'push'
+            run: | 
+              curl -X POST ${{secrets.RENDER_DEPLOY_HOOK}}
+
+          - name: Deploy Success
+            if: success()
+            run: echo "Deployment triggered successfully"
+        
