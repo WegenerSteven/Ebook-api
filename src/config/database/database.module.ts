@@ -30,6 +30,14 @@ import {
           synchronize: shouldSync,
           logging: configService.getOrThrow<boolean>('DB_LOGGING'),
           migrations: [__dirname + '/migrations/**/*{.ts, .js}'],
+          ssl:
+            configService.getOrThrow<string>('DB_SSLMODE') === 'require'
+              ? { rejectUnauthorized: false }
+              : false,
+          channelBinding:
+            configService.getOrThrow<string>('DB_CHANNELBINDING') === 'require'
+              ? 'require'
+              : 'none',
           autoLoadEntities: true,
           keepConnectionAlive: true,
         };
